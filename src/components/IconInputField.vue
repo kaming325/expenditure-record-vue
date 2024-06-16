@@ -3,13 +3,13 @@
     <h2>{{ label ?? 'label' }}</h2>
     <div
       ref="container"
-      class="flex border-b-4 transition-colors ease-linear duration-700"
+      class="flex border-b-4 transition-colors ease-linear duration-500"
       :class="isFocus ? 'border-green-700' : 'border-blue-700'"
     >
       <span>
         <div
           ref="icon"
-          class="w-10 h-10 transition-colors duration-700 ease-in"
+          class="w-10 h-10 transition-colors duration-500 ease-in"
           v-html="props?.icon"
           :class="isFocus ? 'text-green-700' : 'text-blue-700'"
         ></div>
