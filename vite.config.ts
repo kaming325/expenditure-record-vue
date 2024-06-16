@@ -8,8 +8,12 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@assets': path.resolve(__dirname, './src/assets'),
+      '@views': path.resolve(__dirname, './src/views'),
       '@components': path.resolve(__dirname, './src/components'),
     },
+  },
+  define: {
+    'process.env': {}
   },
   plugins: [vue()],
 })

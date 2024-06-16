@@ -16,3 +16,10 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
    1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
    2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+
+env variables:
+```
+import.meta.env.PROD: {boolean} whether the app is running in production (running the dev server with NODE_ENV='production' or running an app built with NODE_ENV='production').
+
+import.meta.env.DEV: {boolean} whether the app is running in development (always the opposite of import.meta.env.PROD)
+```
