@@ -8,7 +8,8 @@
         label="Email"
         :icon="catIcon"
         v-model:input-value="loginInfo.email"
-        class="mb-2"
+        inputType="email"
+        class="mb-4"
       ></IconInputField>
 
       <IconInputField
@@ -16,7 +17,7 @@
         :icon="lockIcon"
         v-model:input-value="loginInfo.password"
         inputType="password"
-        class="mb-2"
+        class="mb-4"
       ></IconInputField>
     </div>
 

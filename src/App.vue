@@ -7,6 +7,7 @@
           <nav v-if="hasLoggedIn">
             <RouterLink to="/">Go to Home</RouterLink>
             <RouterLink to="/about">Go to About</RouterLink>
+            <RouterLink to="/user">Go to User</RouterLink>
             <RouterLink to="/login">Go to login</RouterLink>
           </nav>
           <main>
