@@ -8,7 +8,7 @@ import User from "@views/User.vue"
 const routes = [
   { path: '/', component: Home },
   { path: '/about', component: About },
-  { path: '/login', component: Login },
+  // { path: '/login', component: Login },
   { path: '/user', component: User },
 ]
 

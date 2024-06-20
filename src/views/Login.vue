@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 items-center">
+  <div v-on:keyup.enter="login" class="flex flex-col gap-4 items-center">
     <div class="text-2xl font-bold">
       <div>Login</div>
     </div>
@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { loading, setUserSession } from "@/main";
 import { onBeforeMount, reactive, ref } from "vue";
 
 import { computed } from "vue";
@@ -51,8 +52,6 @@ const loginInfo = reactive({
   phone: "",
   password: "",
 });
-
-const loading = ref(false);
 
 const canLogin = computed(() => {
   return !!((loginInfo.email || loginInfo.phone) && loginInfo.password);
@@ -79,7 +78,8 @@ async function login() {
     console.log(resp);
 
     if (resp.data?.session) {
-      localStorage.setItem("userSession", JSON.stringify(resp.data.session));
+      // localStorage.setItem("userSession", JSON.stringify(resp.data.session));
+      setUserSession(resp.data.session)
       router.push("/");
     }
   } catch (error) {
@@ -89,10 +89,25 @@ async function login() {
   }
 }
 
+document?.querySelector('#txtSearch')?.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      // code for enter
+    }
+});
+
 function debug() {
+  loading.value = true
+
   console.log(canLogin.value);
 
-  // router.push("/");
+  // localStorage.setItem("userSession", JSON.stringify({user: 'hi'}));
+
+  setUserSession({user: 'hi'})
+
+  loading.value = false
+
+
+  router.push("/");
 }
 
 // onBeforeMount(() => {
