@@ -1,27 +1,38 @@
-import { createApp, reactive } from 'vue'
-import './style.css'
-import App from './App.vue'
-import router from './router'
+import { createApp, reactive } from "vue";
+import "./style.css";
+import App from "./App.vue";
+import router from "./router";
+import PrimeVue from "primevue/config";
+import StyleClass from "primevue/styleclass";
 
-export const loading = reactive({
-    value: false
-})
+import Aura from "@primevue/themes/aura";
+import Lara from "@primevue/themes/lara";
+import Nora from "@primevue/themes/nora";
+import AutoComplete from "primevue/autocomplete";
+import ToastService from "primevue/toastservice";
 
-export const store = reactive({
-    userSession: null
-})
+import 'primeicons/primeicons.css'
 
-export function setUserSession(user: any) {
-    store.userSession = user
-}
 
-export function removeUserSession() {
-    store.userSession = null
-}
+// import "primevue/resources/themes/md-light-indigo/theme.css";
 
-createApp(App).use(router).mount('#app')
-// export default {
-//     store,
-//     setUserSession,
-//     removeUserSession
-// }
+createApp(App)
+  .use(router)
+  .use(PrimeVue, {
+    ripple: true,
+    theme: {
+      preset: Lara,
+      options: {
+        // prefix: "p",
+        darkModeSelector: ".app-dark",
+        // cssLayer: {
+        //   name: "primevue",
+        //   order: "tailwind-base, primevue, tailwind-utilities",
+        // },
+      },
+    },
+  })
+  .use(ToastService)
+  // .directive("styleclass", StyleClass)
+  .component("AutoComplete", AutoComplete)
+  .mount("#app");

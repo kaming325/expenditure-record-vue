@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h2>{{ label ?? "label" }}</h2>
+    <h2>{{ label ?? "" }}</h2>
     <!-- class="flex border-b-4 transition-colors ease-linear duration-500" -->
     <div>
-      <div class="flex">
+      <div class="flex items-center max-w-[50rem]">
         <!-- :class="isFocus ? 'border-green-700' : 'border-blue-700'" -->
         <span>
           <div
             ref="icon"
-            class="w-10 h-10 transition-colors duration-300 ease-linear"
+            class="w-8 h-8 transition-colors duration-300 ease-linear"
             v-html="props?.icon"
             :class="isFocus ? 'text-green-700' : 'text-blue-700'"
           ></div>
@@ -16,10 +16,11 @@
         <input
           @focusin="isFocus = true"
           @focusout="isFocus = false"
-          class="outline-none ml-2"
+          class="outline-none ml-2 bg-transparent max-w-36 sm:max-w-60"
           :type="props.inputType ?? 'text'"
           v-model="inputValue"
         />
+          <slot name="append-inner"></slot>
       </div>
       <div class="bg-blue-700 h-[3px] w-full">
         <div ref="bar" class="h-full bg-green-700" style="width: 0%"></div>
@@ -63,4 +64,10 @@ watch(isFocus, (n, o) => {
 });
 </script>
 
-<style scoped></style>
+<style>
+.p-password-input {
+  outline: none;
+  border: 0px;
+  background: transparent;
+}
+</style>
