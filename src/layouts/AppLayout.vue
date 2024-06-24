@@ -71,15 +71,18 @@
               v-show="isOpen"
               class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-[3.5rem]"
             >
-              <a href="#" class="block px-4 py-2 account-link hover:text-white"
+              <!-- <a href="#" class="block px-4 py-2 account-link hover:text-white"
                 >Account</a
-              >
+              > -->
+              <Button @click="$router.push('/user')" class="block px-4 py-2 account-link hover:text-white">
+                Account
+              </Button>
               <a href="#" class="block px-4 py-2 account-link hover:text-white"
                 >Support</a
               >
-              <button @click="logout" class="block px-4 py-2 account-link hover:text-white"
+              <Button @click="logout" class="block px-4 py-2 account-link hover:text-white"
                 >Sign Out
-              </button>
+              </Button>
             </div>
           </div>
         </header>
@@ -245,6 +248,8 @@
 import { onBeforeMount, computed, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import Button from "primevue/button";
+
 import MenuIcon from "@assets/icons/menu.svg?raw";
 import MenuIcon1 from "@assets/icons/menu2.svg?raw";
 import CloseIcon from "@assets/icons/close.svg?raw";
@@ -266,7 +271,7 @@ const tabs = [
   },
   {
     name: "Account",
-    to: "/user",
+    to: "/account",
   },
   {
     name: "login",
@@ -293,11 +298,6 @@ function logout() {
 </script>
 
 <style scoped>
-.bg-layout {
-  background-image: url("@assets/img/comics-peanuts-snoopy-wallpaper-preview.jpg");
-  background-size: 20%;
-  opacity: 0.5;
-}
 
 /* @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap'); */
 .font-family-ubuntu {

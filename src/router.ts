@@ -9,6 +9,7 @@ import Login from "@views/Login.vue";
 import Home from "@views/Home.vue";
 import User from "@views/User.vue";
 import NewRecord from "@views/NewRecord.vue";
+import Account from "@views/Account.vue";
 
 const routes = [
   {
@@ -19,6 +20,7 @@ const routes = [
       { path: "/about", component: About },
       { path: "/user", component: User },
       { path: "/newRecord", component: NewRecord },
+      { path: "/account", component: Account },
     ],
   },
   // { path: '/', component: Home },
