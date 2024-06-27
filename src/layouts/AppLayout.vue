@@ -6,11 +6,15 @@
       >
         <div class="h-full flex flex-col">
           <div class="p-6">
-            <a
+            <!-- <a
               href="index.html"
               class="text-white text-3xl font-semibold uppercase hover:text-gray-300"
               >Admin</a
-            >
+            > -->
+
+            <div role="button">        
+              <span class="pi pi-home text-white" style="font-size: 2rem;" />
+            </div>
             <button
               @click="$router.push('/newRecord')"
               class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex gap-1 items-center justify-center"
@@ -90,21 +94,24 @@
         <!-- Mobile Header & Nav -->
         <header class="w-full bg-sidebar py-5 px-6 sm:hidden">
           <div class="flex items-center justify-between">
-            <a
+            <!-- <a
               href="index.html"
               class="text-white text-3xl font-semibold uppercase hover:text-gray-300"
               >Admin</a
-            >
+            > -->
+            <div role="button">        
+              <span class="pi pi-home text-white" style="font-size: 2rem;" />
+            </div>
             <button
               @click="isOpen = !isOpen"
               class="text-black text-3xl focus:outline-none"
             >
               <span v-if="!isOpen">
-                <div class="w-8 h-8 text-black" v-html="MenuIcon"></div>
+                <div class="w-8 h-8 text-white" v-html="MenuIcon"></div>
               </span>
 
               <span v-else>
-                <div class="w-8 h-8 text-black" v-html="CloseIcon"></div>
+                <div class="w-8 h-8 text-white" v-html="CloseIcon"></div>
               </span>
             </button>
           </div>
@@ -305,7 +312,7 @@ function logout() {
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 .bg-sidebar {
-  background: #3d68ff;
+  background: #476fff;
 }
 .cta-btn {
   color: #3d68ff;

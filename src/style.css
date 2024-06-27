@@ -102,3 +102,7 @@ button:focus-visible {
 ::-webkit-scrollbar-thumb:hover {
 	background: #555;
 }
+
+.p-toast {
+  width: min(20rem, 100vw) !important;
+}

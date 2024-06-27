@@ -1,28 +1,64 @@
 <template>
-  <div class="">
-    <Button label="Show" @click="show()" />
-    <h2>New Record</h2>
+  <div class="flex flex-col gap-6">
+    <Toast />
 
-    <AutoComplete></AutoComplete>
+    <!-- <Button label="Show" @click="show()" /> -->
+    <div class="flex gap-4">
+      <Select
+        v-model="selectedAccount"
+        :options="userAccounts ?? []"
+        optionLabel="account_name"
+        placeholder="Select an account"
+        :loading="loading"
+        class="w-full md:w-56"
+      ></Select>
+      <ToggleButton
+        v-model="isExpend"
+        onLabel="Expend"
+        offLabel="Income"
+        onIcon="pi pi-lock"
+        offIcon="pi pi-lock-open"
+        class="w-36"
+        aria-label="Do you confirm"
+      />
+    </div>
 
-    <div>a</div>
+    <!-- <AutoComplete></AutoComplete> -->
 
-    <InputText></InputText>
-    <InputNumber
+    <!-- <div>a</div> -->
+
+    <!-- <InputText></InputText> -->
+    <Select
+        v-model="selectedAccount"
+        :options="userAccounts ?? []"
+        optionLabel="account_name"
+        placeholder="Select a category"
+        :loading="loading"
+        class="w-full md:w-56"
+      ></Select>
+
+    <FloatLabel class="w-full md:w-56">
+      <InputText id="detail" class="w-full md:w-56" v-model="detail" />
+      <label for="detail">Detail</label>
+    </FloatLabel>
+
+    <!-- <InputNumber
       v-model="value1"
       mode="currency"
       currency="USD"
       locale="en-US"
-    />
+    /> -->
 
     <InputNumber
-      v-model="value1"
+      v-model="delta"
+      class="w-full md:w-40"
       inputId="horizontal-buttons"
       showButtons
       buttonLayout="horizontal"
-      :step="0.25"
+      :step="1"
+      :min="0"
       mode="currency"
-      currency="CAD"
+      :currency="selectedAccount?.currency_code ?? 'CAD'"
     >
       <template #incrementbuttonicon>
         <span class="pi pi-plus" />
@@ -32,28 +68,20 @@
       </template>
     </InputNumber>
 
-    <Button @click="debug" label="Submit"> </Button>
-
     <ToggleButton
-      v-model="checked"
-      onLabel="Locked"
-      offLabel="Unlocked"
-      onIcon="pi pi-lock"
-      offIcon="pi pi-lock-open"
+      v-model="addRemark"
+      onLabel="Remark"
+      offLabel="Remark"
+      onIcon="pi pi-pencil"
+      offIcon="pi pi-pencil"
       class="w-36"
       aria-label="Do you confirm"
     />
 
-    <Select
-      v-model="selectedAccount"
-      :options="userAccounts ?? []"
-      optionLabel="account_name"
-      placeholder="Select an account"
-      :loading="loading"
-      class="w-full md:w-56"
-    ></Select>
+    <Textarea v-if="addRemark" v-model="remark" autoResize rows="5" cols="30" />
+
+    <Button @click="debug" class="w-full md:w-40" label="Submit"></Button>
   </div>
-  <Toast />
 </template>
 
 <script setup lang="ts">
@@ -64,10 +92,12 @@ import Button from "primevue/button";
 import ToggleButton from "primevue/togglebutton";
 import Select from "primevue/select";
 import InputNumber from "primevue/inputnumber";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, Ref, ref } from "vue";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import { sendRequest, validateToken } from "@/main";
+import FloatLabel from "primevue/floatlabel";
+import Textarea from "primevue/textarea";
 
 const toast = useToast();
 
@@ -75,12 +105,75 @@ const userSession = JSON.parse(localStorage.getItem("userSession") ?? "{}");
 
 const loading = ref(false);
 
-const checked = ref(false);
-const value1 = ref(0);
+const isExpend = ref(true);
+const addRemark = ref(false);
+
+const delta = ref(0);
+const _delta = computed({
+  // getter
+  get() {
+    return delta.value;
+  },
+  // setter
+  set(v) {
+    delta.value = v ? (typeof v === "string" ? parseFloat(v) : v) : 0;
+  },
+});
 
 const userAccounts = ref([]);
-const selectedAccount = ref(null);
+const selectedAccount: Ref<any> = ref(null);
 
+const detail = ref("");
+const remark = ref("");
+
+async function createNewRecord() {
+  if (loading.value) {
+    console.log("loading");
+    return;
+  }
+  const access_token = await validateToken();
+  if (!access_token) {
+    toast.add({
+      severity: "error",
+      summary: "Auth Error",
+      detail: "failed to get user token, please login again",
+      life: 3000,
+    });
+    console.warn("no valid token");
+    return;
+  }
+  loading.value = true;
+  try {
+    const resp = await sendRequest(
+      "api/transaction",
+      "POST",
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+      {
+        account: selectedAccount?.value?.id,
+        category: '',
+        delta: isExpend.value ? -delta.value : delta.value,
+        remark: remark.value,
+        detail: detail.value,
+      }
+    );
+    console.log(resp);
+    if (!resp?.error) {
+      toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Create new transaction success!",
+        life: 3000,
+      });
+    }
+  } catch (error) {
+    console.warn(error);
+  } finally {
+    loading.value = false;
+  }
+}
 function debug() {
   const root = document.getElementsByTagName("html")[0];
   root.classList.toggle("app-dark");
@@ -116,10 +209,15 @@ onMounted(async () => {
     },
     {}
   );
-  if(accounts?.data) {
-    userAccounts.value = accounts.data
+  if (accounts?.data) {
+    userAccounts.value = accounts.data;
   }
   loading.value = false;
-
 });
 </script>
+
+<style>
+.p-textarea {
+  /* @apply p-4 */
+}
+</style>

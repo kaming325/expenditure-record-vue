@@ -50,9 +50,9 @@
         <div @click="login" role="button">
           <h2>Login</h2>
         </div>
-        <!-- <div @click="debug" role="button">
+        <div @click="debug" role="button">
           <h2>debug</h2>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
