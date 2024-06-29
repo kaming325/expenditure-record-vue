@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-6">
     <Toast />
 
-    <!-- <Button label="Show" @click="show()" /> -->
+    <Button label="Show" @click="show()" />
     <div class="flex gap-4">
       <Select
         v-model="selectedAccount"
@@ -16,8 +16,8 @@
         v-model="isExpend"
         onLabel="Expend"
         offLabel="Income"
-        onIcon="pi pi-lock"
-        offIcon="pi pi-lock-open"
+        onIcon="pi pi-arrow-up"
+        offIcon="pi pi-arrow-down"
         class="w-36"
         aria-label="Do you confirm"
       />
@@ -29,13 +29,13 @@
 
     <!-- <InputText></InputText> -->
     <Select
-        v-model="selectedAccount"
-        :options="userAccounts ?? []"
-        optionLabel="account_name"
-        placeholder="Select a category"
-        :loading="loading"
-        class="w-full md:w-56"
-      ></Select>
+      v-model="selectedAccount"
+      :options="userAccounts ?? []"
+      optionLabel="account_name"
+      placeholder="Select a category"
+      :loading="loading"
+      class="w-full md:w-56"
+    ></Select>
 
     <FloatLabel class="w-full md:w-56">
       <InputText id="detail" class="w-full md:w-56" v-model="detail" />
@@ -68,6 +68,14 @@
       </template>
     </InputNumber>
 
+    <DatePicker
+      showButtonBar
+      v-model="date"
+      showIcon
+      :manualInput="false"
+      class="w-full md:w-40"
+    ></DatePicker>
+
     <ToggleButton
       v-model="addRemark"
       onLabel="Remark"
@@ -92,12 +100,14 @@ import Button from "primevue/button";
 import ToggleButton from "primevue/togglebutton";
 import Select from "primevue/select";
 import InputNumber from "primevue/inputnumber";
-import { computed, onMounted, Ref, ref } from "vue";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
-import { sendRequest, validateToken } from "@/main";
 import FloatLabel from "primevue/floatlabel";
 import Textarea from "primevue/textarea";
+import DatePicker from "primevue/datepicker";
+
+import { sendRequest, validateToken } from "@/main";
+import { computed, onMounted, Ref, ref } from "vue";
 
 const toast = useToast();
 
@@ -109,22 +119,24 @@ const isExpend = ref(true);
 const addRemark = ref(false);
 
 const delta = ref(0);
-const _delta = computed({
-  // getter
-  get() {
-    return delta.value;
-  },
-  // setter
-  set(v) {
-    delta.value = v ? (typeof v === "string" ? parseFloat(v) : v) : 0;
-  },
-});
+// const _delta = computed({
+//   // getter
+//   get() {
+//     return delta.value;
+//   },
+//   // setter
+//   set(v) {
+//     delta.value = v ? (typeof v === "string" ? parseFloat(v) : v) : 0;
+//   },
+// });
 
 const userAccounts = ref([]);
 const selectedAccount: Ref<any> = ref(null);
 
 const detail = ref("");
 const remark = ref("");
+
+const date = ref(new Date());
 
 async function createNewRecord() {
   if (loading.value) {
@@ -153,7 +165,7 @@ async function createNewRecord() {
       },
       {
         account: selectedAccount?.value?.id,
-        category: '',
+        category: "",
         delta: isExpend.value ? -delta.value : delta.value,
         remark: remark.value,
         detail: detail.value,
@@ -220,4 +232,25 @@ onMounted(async () => {
 .p-textarea {
   /* @apply p-4 */
 }
+/* .p-datepicker-calendar-container {
+  @apply w-full;
+}
+
+.p-datepicker-calendar {
+  @apply w-full;
+}
+
+@media screen and (max-width: 640px) {
+  .p-datepicker-weekday-cell {
+    @apply !p-0;
+  }
+  
+  .p-datepicker-day-cell {
+    @apply !p-0;
+  }
+}
+
+.p-datepicker-header {
+  @apply w-full;
+} */
 </style>
