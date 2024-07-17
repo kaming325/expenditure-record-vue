@@ -50,12 +50,13 @@
         <div @click="login" role="button">
           <h2>Login</h2>
         </div>
-        <div @click="debug" role="button">
+        <div v-if="dev" @click="debug" role="button">
           <h2>debug</h2>
         </div>
       </div>
     </div>
   </div>
+  <Toast />
 </template>
 
 <script setup lang="ts">
@@ -65,6 +66,8 @@ import { onBeforeMount, reactive, ref } from "vue";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 import IconInputField from "@components/IconInputField.vue";
 
 import snoopy from "@assets/img/snoopy.jpg";
@@ -77,8 +80,12 @@ import passwordHide from "@assets/icons/password-hide.svg?raw";
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
+const dev = import.meta.env.DEV;
+
 const router = useRouter();
 const route = useRoute();
+
+const toast = useToast();
 
 const loading = ref(false);
 
@@ -111,11 +118,32 @@ async function login() {
     console.log(resp);
     if (resp.data?.session) {
       localStorage.setItem("userSession", JSON.stringify(resp.data.session));
+      toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Login success!",
+        life: 3000,
+      });
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       // setUserSession(resp.data.session)
       router.push("/");
     }
+    if(resp.error) {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: `Login error: ${resp.error?.name}`,
+        life: 3000,
+      });
+    }
   } catch (error) {
     console.warn(error);
+    toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: `Login error: ${error.message}`,
+        life: 3000,
+      });
   } finally {
     loading.value = false;
   }

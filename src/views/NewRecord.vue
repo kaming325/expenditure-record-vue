@@ -2,7 +2,9 @@
   <div class="flex flex-col gap-6">
     <Toast />
 
-    <Button label="Show" @click="show()" />
+    <!-- <Button label="Show" @click="show()" /> -->
+
+    <div class="text-3xl font-semibold">Make a new transaction</div>
     <div class="flex gap-4">
       <Select
         v-model="selectedAccount"
@@ -13,11 +15,11 @@
         class="w-full md:w-56"
       ></Select>
       <ToggleButton
-        v-model="isExpend"
-        onLabel="Expend"
-        offLabel="Income"
-        onIcon="pi pi-arrow-up"
-        offIcon="pi pi-arrow-down"
+        v-model="isIncome"
+        offLabel="Expend"
+        onLabel="Income"
+        offIcon="pi pi-arrow-up"
+        onIcon="pi pi-arrow-down"
         class="w-36"
         aria-label="Do you confirm"
       />
@@ -29,8 +31,8 @@
 
     <!-- <InputText></InputText> -->
     <Select
-      v-model="selectedAccount"
-      :options="userAccounts ?? []"
+      v-model="selectedCategory"
+      :options="categories ?? []"
       optionLabel="account_name"
       placeholder="Select a category"
       :loading="loading"
@@ -88,7 +90,7 @@
 
     <Textarea v-if="addRemark" v-model="remark" autoResize rows="5" cols="30" />
 
-    <Button @click="debug" class="w-full md:w-40" label="Submit"></Button>
+    <Button @click="createNewRecord" class="w-full md:w-40" label="Submit"></Button>
   </div>
 </template>
 
@@ -115,7 +117,7 @@ const userSession = JSON.parse(localStorage.getItem("userSession") ?? "{}");
 
 const loading = ref(false);
 
-const isExpend = ref(true);
+const isIncome = ref(false);
 const addRemark = ref(false);
 
 const delta = ref(0);
@@ -132,6 +134,9 @@ const delta = ref(0);
 
 const userAccounts = ref([]);
 const selectedAccount: Ref<any> = ref(null);
+
+const categories = ref([]);
+const selectedCategory = ref(null);
 
 const detail = ref("");
 const remark = ref("");
@@ -165,14 +170,14 @@ async function createNewRecord() {
       },
       {
         account: selectedAccount?.value?.id,
-        category: "",
-        delta: isExpend.value ? -delta.value : delta.value,
+        category: selectedCategory?.value,
+        delta: isIncome.value ? -delta.value : delta.value,
         remark: remark.value,
         detail: detail.value,
       }
     );
     console.log(resp);
-    if (!resp?.error) {
+    if (resp?.data) {
       toast.add({
         severity: "success",
         summary: "Success",
@@ -180,8 +185,22 @@ async function createNewRecord() {
         life: 3000,
       });
     }
+    if (resp?.error) {
+      toast.add({
+        severity: "error",
+        summary: "Transaction Error",
+        detail: `Error: ${resp?.error?.message}`,
+        life: 3000,
+      });
+    }
   } catch (error) {
     console.warn(error);
+    toast.add({
+        severity: "error",
+        summary: "Transaction Error",
+        detail: `Error: ${error.message}`,
+        life: 3000,
+      });
   } finally {
     loading.value = false;
   }

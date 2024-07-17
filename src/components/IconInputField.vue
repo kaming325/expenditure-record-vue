@@ -3,7 +3,7 @@
     <h2>{{ label ?? "" }}</h2>
     <!-- class="flex border-b-4 transition-colors ease-linear duration-500" -->
     <div>
-      <div class="flex items-center max-w-[50rem]">
+      <div class="flex items-center max-w-[50rem] w-60 sm:w-80">
         <!-- :class="isFocus ? 'border-green-700' : 'border-blue-700'" -->
         <span>
           <div
@@ -16,7 +16,7 @@
         <input
           @focusin="isFocus = true"
           @focusout="isFocus = false"
-          class="outline-none ml-2 bg-transparent max-w-36 sm:max-w-60"
+          class="outline-none ml-2 bg-transparent w-full max-w-60 sm:max-w-80"
           :type="props.inputType ?? 'text'"
           v-model="inputValue"
         />

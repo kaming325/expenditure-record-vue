@@ -1,26 +1,28 @@
 <template>
-  <div class="flex flex-col gap-6">
-    <div>hi</div>
+  <div class="flex flex-col gap-10 mt-6">
+    <FloatLabel class="w-full md:w-56">
+      <Select
+        id="selectedCurrency"
+        v-model="accountType"
+        :options="['cash', 'credit']"
+        placeholder="Select a type"
+        class="w-full md:w-56"
+      ></Select>
+      <label for="accountType">Account Type</label>
+    </FloatLabel>
 
-    <div>
-      {{ `selected currency: ${selectedCurrency?.code ?? "-"}` }}
-    </div>
-
-    <Select
-      v-model="accountType"
-      :options="['cash', 'credit']"
-      placeholder="Select a type"
-      class="w-full md:w-56"
-    ></Select>
-
-    <AutoComplete
-      v-model="selectedCurrency"
-      :suggestions="filteredCurrencies"
-      optionLabel="name"
-      dropdown
-      class="w-full md:w-56"
-      @complete="search"
-    />
+    <FloatLabel class="w-full md:w-56">
+      <AutoComplete
+        id="selectedCurrency"
+        v-model="selectedCurrency"
+        :suggestions="filteredCurrencies"
+        optionLabel="name"
+        dropdown
+        class="w-full md:w-56"
+        @complete="search"
+      />
+      <label for="selectedCurrency">Currency Type</label>
+    </FloatLabel>
 
     <FloatLabel class="w-full md:w-56">
       <InputText id="newAccountName" v-model="newAccountName" />
@@ -50,6 +52,22 @@
       </template>
     </InputNumber>
 
+    <hr />
+    <div>
+      <div>
+        {{ `Selected Account Type: ${accountType ?? "-"}` }}
+      </div>
+      <div>
+        {{ `Selected Currency: ${selectedCurrency?.code ?? "-"}` }}
+      </div>
+      <div>
+        {{ `Account Name: ${newAccountName || "-"}` }}
+      </div>
+      <div>
+        {{ `Initial Amount: ${initAmt ?? "-"}` }}
+      </div>
+    </div>
+
     <Button
       label="Add Account"
       @click="createNewAcc"
@@ -57,6 +75,7 @@
       class="w-full md:w-56"
     />
   </div>
+
   <Toast />
 </template>
 
