@@ -75,6 +75,7 @@
       v-model="date"
       showIcon
       :manualInput="false"
+      dateFormat="dd/mm/yy"
       class="w-full md:w-40"
     ></DatePicker>
 
@@ -171,9 +172,10 @@ async function createNewRecord() {
       {
         account: selectedAccount?.value?.id,
         category: selectedCategory?.value,
-        delta: isIncome.value ? -delta.value : delta.value,
+        delta: isIncome.value ? delta.value : -delta.value,
         remark: remark.value,
         detail: detail.value,
+        date: `${date.value.getFullYear()}-${('0' + (date.value.getMonth() + 1)).slice(-2)}-${('0' + date.value.getDate()).slice(-2)}`,
       }
     );
     console.log(resp);
@@ -193,7 +195,7 @@ async function createNewRecord() {
         life: 3000,
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.warn(error);
     toast.add({
         severity: "error",

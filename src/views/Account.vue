@@ -188,7 +188,7 @@ onMounted(async () => {
     (await import("@/assets/data/Common-Currency.json")) ?? {}
   )
     .map(([k, v]) => v)
-    ?.sort((a, b) => a.name?.localeCompare(b.name)) as typeof currencies.value;
+    ?.sort((a: any, b: any) => a.name?.localeCompare(b.name)) as typeof currencies.value;
   loading.value = false;
 });
 </script>

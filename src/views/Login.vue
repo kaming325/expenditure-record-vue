@@ -136,7 +136,7 @@ async function login() {
         life: 3000,
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.warn(error);
     toast.add({
         severity: "error",
@@ -151,7 +151,7 @@ async function login() {
 
 document
   ?.querySelector("#txtSearch")
-  ?.addEventListener("keypress", function (e) {
+  ?.addEventListener("keypress", function (e: any) {
     if (e.key === "Enter") {
       // code for enter
     }
